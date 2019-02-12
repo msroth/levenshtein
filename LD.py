@@ -546,9 +546,10 @@ def find_ld(s, t, c=(1, 1, 1)):
     return dist[row][col], dist
 
 
-def calc_ratio(s,t):
+def calc_ratio(s, t):
 
-    # when calculating the ratio the cost of a sub=2 (it is a delete + insert)
+    # when calculating the ratio the cost of a sub=2
+    # think of it is delete + insert
     dist, m = find_ld(s, t, [1, 1, 2])
     ratio = ((len(s) + len(t)) - dist) / (len(s) + len(t))
     return ratio
