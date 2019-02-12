@@ -363,7 +363,7 @@ def build_ops_matrix_and_ws(s, t, min_m):
                 elif col == cols:
                     working_string = working_string + str(t[col])
                 else:
-                    working_string = working_string[:row - 1] + str(t[col]) + working_string[row:]
+                    working_string = working_string[:row - 1] + str(t[col]) + working_string[row - 1:]
                 edits.append(working_string + " <- insert '" + str(t[col]) + "' pos: " + str(col))
 
                 # move current cell
