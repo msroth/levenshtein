@@ -20,6 +20,7 @@ PURPOSE:    Calculate the Levenshtein Distance (LD) between two strings.
 AUTHOR:     MSRoth
 
 LAST UPDATE:  2019-02-12 -- fixed bug in working string insert operation
+                         -- added calculation for Levenshtein similarity ratio
 
 USAGE:      >python LD.py
 
@@ -60,11 +61,13 @@ OUTPUT:
 
 COMMENTS:
             - The cost of each edit is fixed at 1.  Radically different
-              different results are obtained if this changes.
+              results are obtained if this changes.
             - www.python-course.eu/levenshtein_distance.php
             - www.let.rug.nl/kleiweg/lev/
             - web.stanford.edu/class/cs124/lec/med.pdf
             - stackoverflow.com/questions/5849139/levenshtein-distance-inferring-the-edit-operations-from-the-matrix
+            - https://www.datacamp.com/community/tutorials/fuzzy-string-python
+
 =====================================================================
 """
 # global constants
@@ -82,10 +85,12 @@ def get_user_input():
 
     :return: str:source, str:target, int:debug
     """
-    string1 = input("Enter first word (source) [" + str(_string1) + "]: ").strip()
+
+    # note:  input forced to lower case.  Case effects LD calculations
+    string1 = input("Enter first word (source) [" + str(_string1) + "]: ").strip().lower()
     if not string1:
         string1 = _string1
-    string2 = input("Enter second word (target) [" + str(_string2) + "]: ").strip()
+    string2 = input("Enter second word (target) [" + str(_string2) + "]: ").strip().lower()
     if not string2:
         string2 = _string2
     debug = input("Enter level of output (0, 1, 2) [" + str(_debug) + "]: ").strip()
@@ -435,7 +440,7 @@ def find_ld(s, t, c=(1, 1, 1)):
 
     :param s: source string
     :param t: target string
-    :param c: cost tuple
+    :param c: cost tuple [delete, insert, sub]
 
     :return: int:ld, list of lists:dist
 
@@ -541,6 +546,14 @@ def find_ld(s, t, c=(1, 1, 1)):
     return dist[row][col], dist
 
 
+def calc_ratio(s,t):
+
+    # when calculating the ratio the cost of a sub=2 (it is a delete + insert)
+    dist, m = find_ld(s, t, [1, 1, 2])
+    ratio = ((len(s) + len(t)) - dist) / (len(s) + len(t))
+    return ratio
+
+
 # #### MAIN ####
 print()
 print("Demonstrate computation of Levenshtein Distance (LD) between two words.")
@@ -578,6 +591,10 @@ if len(source) < len(target):
 # calculate Levenshtein distance
 ld, dist_m = find_ld(source, target, costs)
 
+# calculate the Levenshtein similarity ratio
+# ((len(s) + len(t)) - LD) / (len(s) + len(t))
+lev_ratio = calc_ratio(source, target)
+
 # print results
 if verbose > 0:
 
@@ -608,6 +625,7 @@ if verbose > 0:
 
 print()
 print("Levenshtein Distance (LD) between '" + source + "' and '" + target + "' is: " + str(ld))
+print("Levenshtein similarity ratio is: " + str(lev_ratio))
 print()
 
 # <>< #
