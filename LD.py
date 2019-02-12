@@ -1,6 +1,7 @@
 """
 =====================================================================
-NAME:       LD.py  (C) 2018
+NAME:       LD.py  (C) 2018, 2019
+
 PURPOSE:    Calculate the Levenshtein Distance (LD) between two strings.
             The LD is the minimum numbers of edits (insert, delete, or
             substitute) to transform one string into another.
@@ -10,8 +11,18 @@ PURPOSE:    Calculate the Levenshtein Distance (LD) between two strings.
             edits to make the transformation.  The code also shows the
             transformation of the source string into the target.
 
+            This code is for educational and demonstration purposes
+            only to help anyone interested understand the algorithm and
+            the inner workings of the transformations.  If you really
+            need to use Levenshtein distances in your code, use the
+            Levenshtein Python library.
+
 AUTHOR:     MSRoth
+
+LAST UPDATE:  2019-02-12 -- fixed bug in working string insert operation
+
 USAGE:      >python LD.py
+
 OUTPUT:
             Final Distance Matrix:
                #  f  l  a  w
@@ -352,7 +363,7 @@ def build_ops_matrix_and_ws(s, t, min_m):
                 elif col == cols:
                     working_string = working_string + str(t[col])
                 else:
-                    working_string = working_string[:row] + str(t[col]) + working_string[row:]
+                    working_string = working_string[:row - 1] + str(t[col]) + working_string[row:]
                 edits.append(working_string + " <- insert '" + str(t[col]) + "' pos: " + str(col))
 
                 # move current cell
