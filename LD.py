@@ -529,17 +529,22 @@ def find_ld(s, t, c=(1, 1, 1)):
             # determine least costly operation
             if del_cost == min(del_cost, ins_cost, sub_cost):
                 dist[row][col] = del_cost
+                if verbose == 2:
+                    print(op_str.format('delete', del_cost))
 
             elif ins_cost == min(del_cost, ins_cost, sub_cost):
                 dist[row][col] = ins_cost
+                if verbose == 2:
+                    print(op_str.format('insert', ins_cost))
 
             else:
                 # sub_cost == min(del_cost, ins_cost, sub_cost):
                 dist[row][col] = sub_cost
+                if verbose == 2:
+                    print(op_str.format('substitute', sub_cost))
 
             # print matrix every iteration is verbose output is on
             if verbose == 2:
-                print(op_str)
                 print()
                 print_matrix(s, t, dist)
 
